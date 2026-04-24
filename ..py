@@ -1,8 +1,9 @@
-p="aab123"
-p_dict = {}
-for char in p:
-    if char not in p_dict:
-        p_dict[char]=1
+nums=[1,2,3,4,5]
+n = len(nums)
+sum_list=[]
+for index,num in enumerate(nums):
+    if index == 0:
+        sum_list.append(num)
     else:
-        p_dict[char]+=1
-print(p_dict)
+        sum_list.append(sum_list[index-1]+num)
+print(sum_list)
