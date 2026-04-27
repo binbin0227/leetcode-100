@@ -4,6 +4,7 @@ class Solution(object):
         :type nums: List[int]
         :rtype: int
         """
+        # 把数组本身当作哈希表
         n = len(nums)
         count = 0
         for i in range(n):
