@@ -5,6 +5,7 @@ class Solution(object):
         :type target: int
         :rtype: bool
         """
+        # 从矩阵的右上角开始搜索，比target小就往左，比target大就往下，越界则不存在target
         m = len(matrix) - 1
         n = len(matrix[0]) - 1
         i = 0
