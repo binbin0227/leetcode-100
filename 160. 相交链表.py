@@ -11,7 +11,7 @@ class Solution(object):
         :type head1, head1: ListNode
         :rtype: ListNode
         """
-        # pa 走完 链表A 后去走 链表B ，pb 走完 链表B 后去走 链表A
+        # pa 走完 链表A 后去走 链表B ，pb 走完 链表B 后去走 链表A 
         # 有相交节点 -> return 循环结束时的 pa
         # 无相交节点 -> return None
         pa, pb = headA, headB

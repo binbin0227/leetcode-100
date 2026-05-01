@@ -4,7 +4,7 @@
 #         self.val = val
 #         self.next = next
 class Solution(object):
-    # 三指针法
+    # 三指针法 
     def reverseList(self, head):
         """
         :type head: Optional[ListNode]
