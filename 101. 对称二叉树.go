@@ -1,0 +1,26 @@
+package main
+
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
+func isSymmetric(root *TreeNode) bool {
+	return check(root.Left, root.Right)
+}
+
+func check(l, r *TreeNode) bool {
+	if l == nil && r == nil {
+		return true
+	}
+	if l == nil || r == nil {
+		return false
+	}
+	if l.Val != r.Val {
+		return false
+	}
+	return check(l.Left, r.Right) && check(r.Left, l.Right)
+}
