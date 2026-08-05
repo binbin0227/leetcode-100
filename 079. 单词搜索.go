@@ -1,30 +1,45 @@
 package main
 
 func exist(board [][]byte, word string) bool {
-	m := len(board)
-	n := len(board[0])
-	var dfs func(idx, i, j int) bool
-	dfs = func(idx, i, j int) bool {
-		if i < 0 || i >= m || j < 0 || j >= n || board[i][j] != word[idx] {
-			return false
-		}
-		if idx == len(word)-1 {
+	res := false
+	m, n := len(board), len(board[0])
+
+	var backtrack func(startIdx int, i, j int) bool
+	backtrack = func(startIdx, i, j int) bool {
+		if startIdx == len(word) {
 			return true
 		}
+
+		if i < 0 || i >= m || j < 0 || j >= n {
+			return false
+		}
+
+		if board[i][j] != word[startIdx] {
+			return false
+		}
+
 		temp := board[i][j]
 		board[i][j] = '#'
-		res := dfs(idx+1, i+1, j) || dfs(idx+1, i-1, j) || dfs(idx+1, i, j+1) || dfs(idx+1, i, j-1)
+		flag := backtrack(startIdx+1, i+1, j) ||
+			backtrack(startIdx+1, i-1, j) ||
+			backtrack(startIdx+1, i, j+1) ||
+			backtrack(startIdx+1, i, j-1)
 		board[i][j] = temp
-		return res
+
+		return flag
 	}
+
+outer:
 	for i := range m {
 		for j := range n {
 			if board[i][j] == word[0] {
-				if dfs(0, i, j) {
-					return true
-				}
+				res = backtrack(0, i, j)
+			}
+			if res == true {
+				break outer
 			}
 		}
 	}
-	return false
+
+	return res
 }

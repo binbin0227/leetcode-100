@@ -1,46 +1,61 @@
 package main
 
-import "strings"
-
 func solveNQueens(n int) [][]string {
 	res := make([][]string, 0)
-	var check func(path []string, row, col int) bool
-	check = func(path []string, row, col int) bool {
-		for i := range row {
-			if path[i][col] == 'Q' {
+	path := make([][]byte, n)
+	for i := range n {
+		path[i] = make([]byte, n)
+		for j := range n {
+			path[i][j] = '.'
+		}
+	}
+
+	check := func(x, y int) bool {
+		// 同一行
+		for j := range y {
+			if path[x][j] == 'Q' {
 				return false
 			}
 		}
-		i, j, k := row-1, col-1, col+1
-		for i >= 0 {
-			if j >= 0 && path[i][j] == 'Q' {
+		// 同一列
+		for i := range x {
+			if path[i][y] == 'Q' {
 				return false
 			}
-			if k < n && path[i][k] == 'Q' {
-				return false
-			}
-			i--
-			j--
-			k++
 		}
+		// 对角线
+		for i := range x {
+			if y-x+i >= 0 && path[i][y-x+i] == 'Q' {
+				return false
+			}
+			if y+x-i < n && path[i][y+x-i] == 'Q' {
+				return false
+			}
+		}
+
 		return true
 	}
-	var backtrack func(path []string, n, row int)
-	backtrack = func(path []string, n, row int) {
+
+	var backtrack func(row int)
+	backtrack = func(row int) {
 		if row == n {
-			temp := make([]string, len(path))
-			copy(temp, path)
+			temp := make([]string, 0)
+			for i := range len(path) {
+				temp = append(temp, string(path[i]))
+			}
 			res = append(res, temp)
 			return
 		}
+
 		for col := range n {
-			if check(path, row, col) {
-				path = append(path, strings.Repeat(".", col)+"Q"+strings.Repeat(".", n-col-1))
-				backtrack(path, n, row+1)
-				path = path[:len(path)-1]
+			if check(row, col) {
+				path[row][col] = 'Q'
+				backtrack(row + 1)
+				path[row][col] = '.'
 			}
 		}
 	}
-	backtrack(nil, n, 0)
+
+	backtrack(0)
 	return res
 }
