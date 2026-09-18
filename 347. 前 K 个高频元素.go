@@ -2,61 +2,53 @@ package main
 
 import "container/heap"
 
-type Card struct {
+type NumCount struct {
 	num   int
 	count int
 }
 
-type MinHeap []Card
+type minHeap []NumCount
 
-func (h MinHeap) Len() int {
+func (h minHeap) Len() int {
 	return len(h)
 }
-func (h MinHeap) Less(i, j int) bool {
-	return h[i].count < h[j].count
+func (h minHeap) Swap(x, y int) {
+	h[x], h[y] = h[y], h[x]
 }
-func (h MinHeap) Swap(i, j int) {
-	h[i], h[j] = h[j], h[i]
+func (h minHeap) Less(x, y int) bool {
+	return h[x].count < h[y].count
 }
-func (h *MinHeap) Push(x any) {
-	*h = append(*h, x.(Card))
+func (h *minHeap) Push(x any) {
+	*h = append(*h, x.(NumCount))
 }
-func (h *MinHeap) Pop() any {
-	old := *h
-	x := old[len(old)-1]
-	*h = old[:len(old)-1]
+func (h *minHeap) Pop() any {
+	x := (*h)[len(*h)-1]
+	*h = (*h)[:len(*h)-1]
 	return x
 }
 
 func topKFrequent(nums []int, k int) []int {
-	countMap := make(map[int]int)
+	m := make(map[int]int, 0)
 	for _, num := range nums {
-		countMap[num]++
+		m[num]++
 	}
 
-	h := &MinHeap{}
+	h := &minHeap{}
 	heap.Init(h)
 
-	for num, count := range countMap {
-		if h.Len() < k {
-			heap.Push(h, Card{
-				num:   num,
-				count: count,
-			})
-		} else {
-			if count > (*h)[0].count {
-				heap.Pop(h)
-				heap.Push(h, Card{
-					num:   num,
-					count: count,
-				})
-			}
+	for key, value := range m {
+		heap.Push(h, NumCount{
+			num:   key,
+			count: value,
+		})
+		if h.Len() > k {
+			heap.Pop(h)
 		}
 	}
 
 	res := make([]int, 0, k)
-	for _, card := range *h {
-		res = append(res, card.num)
+	for _, item := range *h {
+		res = append(res, item.num)
 	}
 	return res
 }

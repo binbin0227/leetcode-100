@@ -3,30 +3,31 @@ package main
 import "strings"
 
 func decodeString(s string) string {
-	numStack := []int{}
-	strStack := []string{}
+	numStack := make([]int, 0)
+	strStack := make([]string, 0)
 	num := 0
-	res := ""
+	str := ""
 
-	for _, ch := range s {
-		if ch >= '0' && ch <= '9' {
-			num = num*10 + int(ch-'0')
-		} else if ch == '[' {
+	for _, word := range s {
+		if word >= '0' && word <= '9' {
+			num = num*10 + int(word-'0') // 这里的word是 ASCII 码
+		} else if word >= 'a' && word <= 'z' {
+			str = str + string(word)
+		} else if word == '[' {
 			numStack = append(numStack, num)
-			strStack = append(strStack, res)
+			strStack = append(strStack, str)
 			num = 0
-			res = ""
-		} else if ch == ']' {
+			str = ""
+		} else {
 			lastNum := numStack[len(numStack)-1]
 			numStack = numStack[:len(numStack)-1]
 
 			lastStr := strStack[len(strStack)-1]
 			strStack = strStack[:len(strStack)-1]
 
-			res = lastStr + strings.Repeat(res, lastNum)
-		} else {
-			res += string(ch)
+			str = lastStr + strings.Repeat(str, lastNum)
 		}
 	}
-	return res
+
+	return str
 }

@@ -1,18 +1,16 @@
-package main
-
-import "math"
-
 func maxProfit(prices []int) int {
-	minPrice := math.MaxInt
-	var res int
-	for _, currPrice := range prices {
-		if currPrice < minPrice {
-			minPrice = currPrice
-			continue
+	res := 0
+	minPrice := prices[0]
+
+	for _, price := range prices {
+		if price < minPrice {
+			minPrice = price
 		}
-		if currPrice-minPrice > res {
-			res = currPrice - minPrice
+
+		if price-minPrice > res {
+			res = price - minPrice
 		}
 	}
+
 	return res
 }

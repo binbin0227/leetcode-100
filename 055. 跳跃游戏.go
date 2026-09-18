@@ -3,17 +3,23 @@ package main
 func canJump(nums []int) bool {
 	// 贪心：遍历每一格并维护目前可到达的最远的位置
 	// 如果当前位置不可到达，返回false；维护最远可到达位置；再看可到达位置是否超过了目标位置
-	n := len(nums)
-	var maxReach int
-	for i := range n {
-		if maxReach < i {
+	
+	maxReach := 0
+
+	for i := 0; i < len(nums); i++ {
+		if i > maxReach {
 			return false
 		}
-		maxReach = max(maxReach, i+nums[i])
-		if maxReach >= n-1 {
+
+		if i+nums[i] > maxReach {
+			maxReach = i + nums[i]
+		}
+
+		if maxReach >= len(nums)-1 {
 			return true
 		}
 	}
+
 	return false
 }
 

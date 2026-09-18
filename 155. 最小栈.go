@@ -7,21 +7,17 @@ type MinStack struct {
 
 func Constructor() MinStack {
 	return MinStack{
-		stack:    []int{},
-		minStack: []int{},
+		stack:    make([]int, 0),
+		minStack: make([]int, 0),
 	}
 }
 
 func (this *MinStack) Push(value int) {
 	this.stack = append(this.stack, value)
-	if len(this.stack)-1 == 0 {
+	if len(this.minStack) == 0 {
 		this.minStack = append(this.minStack, value)
 	} else {
-		if value < this.minStack[len(this.minStack)-1] {
-			this.minStack = append(this.minStack, value)
-		} else {
-			this.minStack = append(this.minStack, this.minStack[len(this.minStack)-1])
-		}
+		this.minStack = append(this.minStack, min(value, this.minStack[len(this.minStack)-1]))
 	}
 }
 

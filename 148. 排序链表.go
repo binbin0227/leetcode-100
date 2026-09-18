@@ -12,20 +12,22 @@ func sortList(head *ListNode) *ListNode {
 		return head
 	}
 
-	mid := cutMiddle(head)
-	left := sortList(head)
-	right := sortList(mid)
+	slow, fast := head, head
+	for fast.Next != nil && fast.Next.Next != nil {
+		fast = fast.Next.Next
+		slow = slow.Next
+	}
+	mid := slow.Next
+	slow.Next = nil
 
-	return merge(left, right)
-}
+	leftSorted := sortList(head)
+	rightSorted := sortList(mid)
 
-func merge(l1, l2 *ListNode) *ListNode {
 	dummy := &ListNode{}
 	curr := dummy
-	p1, p2 := l1, l2
-
+	p1, p2 := leftSorted, rightSorted
 	for p1 != nil && p2 != nil {
-		if p1.Val <= p2.Val {
+		if p1.Val < p2.Val {
 			curr.Next = p1
 			p1 = p1.Next
 		} else {
@@ -34,23 +36,10 @@ func merge(l1, l2 *ListNode) *ListNode {
 		}
 		curr = curr.Next
 	}
-
 	if p1 != nil {
 		curr.Next = p1
 	} else {
 		curr.Next = p2
 	}
-
 	return dummy.Next
-}
-
-func cutMiddle(head *ListNode) *ListNode {
-	slow, fast := head, head
-	for fast.Next != nil && fast.Next.Next != nil {
-		fast = fast.Next.Next
-		slow = slow.Next
-	}
-	mid := slow.Next
-	slow.Next = nil
-	return mid
 }

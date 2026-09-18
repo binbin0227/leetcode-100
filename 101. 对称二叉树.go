@@ -9,10 +9,10 @@ package main
  * }
  */
 func isSymmetric(root *TreeNode) bool {
-	return check(root.Left, root.Right)
+	return compare(root.Left, root.Right)
 }
 
-func check(l, r *TreeNode) bool {
+func compare(l, r *TreeNode) bool {
 	if l == nil && r == nil {
 		return true
 	}
@@ -22,5 +22,5 @@ func check(l, r *TreeNode) bool {
 	if l.Val != r.Val {
 		return false
 	}
-	return check(l.Left, r.Right) && check(r.Left, l.Right)
+	return compare(l.Left, r.Right) && compare(l.Right, r.Left)
 }

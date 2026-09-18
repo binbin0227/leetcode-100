@@ -2,41 +2,41 @@ package main
 
 import "container/heap"
 
-type MinHeap []int
+type minHeap []int
 
-func (h MinHeap) Len() int {
+func (h minHeap) Len() int {
 	return len(h)
 }
-func (h MinHeap) Less(i, j int) bool {
-	return h[i] < h[j]
+
+func (h minHeap) Less(x, y int) bool {
+	return h[x] < h[y]
 }
-func (h MinHeap) Swap(i, j int) {
-	h[i], h[j] = h[j], h[i]
+
+func (h minHeap) Swap(x, y int) {
+	h[x], h[y] = h[y], h[x]
 }
-func (h *MinHeap) Push(x any) {
+
+func (h *minHeap) Push(x any) {
 	*h = append(*h, x.(int))
 }
-func (h *MinHeap) Pop() any {
-	old := *h
-	x := old[len(old)-1]
-	*h = old[:len(old)-1]
+
+func (h *minHeap) Pop() any {
+	x := (*h)[len(*h)-1]
+	*h = (*h)[:len(*h)-1]
 	return x
 }
 
 func findKthLargest(nums []int, k int) int {
-	h := &MinHeap{}
+	h := &minHeap{}
 	heap.Init(h)
 
-	for i := range len(nums) {
-		if h.Len() < k {
-			// 前 k 个人直接进堆
-			heap.Push(h, nums[i])
-		} else {
-			if nums[i] > (*h)[0] {
-				heap.Pop(h)
-				heap.Push(h, nums[i])
-			}
+	for _, num := range nums {
+		heap.Push(h, num)
+
+		if len(*h) > k {
+			heap.Pop(h)
 		}
 	}
+
 	return (*h)[0]
 }

@@ -1,39 +1,33 @@
 package main
 
 func trap(height []int) int {
-	// 先分别计算从最左手到（包括）当前位置和最右手（包括）到当前位置的最高水位
-	// 然后遍历累加每格会积累的水量
+	min := func(x, y int) int {
+		if x < y {
+			return x
+		}
+		return y
+	}
+	max := func(x, y int) int {
+		if x > y {
+			return x
+		}
+		return y
+	}
 
-	res := 0
 	n := len(height)
-	leftMax := make([]int, n)
-	rightMax := make([]int, n)
+	tallestLeft, tallestRight := make([]int, n), make([]int, n)
+	res := 0
 
-	for i := range n {
-		if i == 0 {
-			leftMax[0] = height[0]
-			continue // 记得 continue
-		}
-		if leftMax[i-1] > height[i] {
-			leftMax[i] = leftMax[i-1]
-		} else {
-			leftMax[i] = height[i]
-		}
+	for i := 1; i < n; i++ {
+		tallestLeft[i] = max(tallestLeft[i-1], height[i-1]) //不是 height[i]
 	}
-	for i := n - 1; i >= 0; i-- {
-		if i == n-1 {
-			rightMax[n-1] = height[n-1]
-			continue
-		}
-		if rightMax[i+1] > height[i] {
-			rightMax[i] = rightMax[i+1]
-		} else {
-			rightMax[i] = height[i]
-		}
+	for i := n - 2; i >= 0; i-- {
+		tallestRight[i] = max(tallestRight[i+1], height[i+1])
 	}
 
-	for i := range n {
-		res += max(0, min(leftMax[i], rightMax[i])-height[i])
+	for i := 0; i < n; i++ {
+		res += max(0, min(tallestLeft[i], tallestRight[i])-height[i])
 	}
+
 	return res
 }

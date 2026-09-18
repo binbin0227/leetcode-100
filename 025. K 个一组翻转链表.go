@@ -1,5 +1,3 @@
-package main
-
 /**
  * Definition for singly-linked list.
  * type ListNode struct {
@@ -8,44 +6,39 @@ package main
  * }
  */
 func reverseKGroup(head *ListNode, k int) *ListNode {
-	dummy := &ListNode{}
-	dummy.Next = head
-	curr := dummy
-
-	for check(curr, k) {
-		curr = reverse(curr, k)
-	}
-
-	return dummy.Next
-}
-
-func reverse(n *ListNode, k int) *ListNode {
-	first, curr := n.Next, n.Next
-	dummy := &ListNode{}
-	var next *ListNode
-	for range k {
-		next = curr.Next
-		curr.Next = dummy.Next
-		dummy.Next = curr
-		curr = next
-	}
-	first.Next = next
-	n.Next = dummy.Next
-	return first
-}
-
-func check(n *ListNode, k int) bool {
-	if n == nil {
-		return false
-	}
-
-	for range k {
-		if n.Next != nil {
-			n = n.Next
-			continue
+	check := func(node *ListNode) bool {
+		// 检查 node 后面有没有 k 个节点
+		curr := node
+		for i := 0; i < k; i++ {
+			if curr.Next != nil {
+				curr = curr.Next
+			} else {
+				return false
+			}
 		}
-		return false
+        return true
 	}
 
-	return true
+	reverse := func(pre *ListNode) *ListNode {
+		// 反转 pre 后面的 k 个节点
+		curr := pre.Next
+		futureTail := pre.Next
+		for i := 0; i < k; i++ {
+			n := curr.Next
+			curr.Next = pre.Next
+			pre.Next = curr
+			curr = n
+		}
+		futureTail.Next = curr
+		return futureTail
+	}
+
+	dummy := &ListNode{
+		Next: head,
+	}
+	curr := dummy
+	for check(curr) {
+		curr = reverse(curr)
+	}
+	return dummy.Next
 }

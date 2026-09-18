@@ -8,19 +8,20 @@ package main
  * }
  */
 func getIntersectionNode(headA, headB *ListNode) *ListNode {
-	pa, pb := headA, headB
+	p1, p2 := headA, headB
 
-	for pa != pb {
-		if pa == nil {
-			pa = headB
+	for p1 != p2 {
+		if p1 == nil { // 不要写 if p1.Next == nil
+			p1 = headB
 		} else {
-			pa = pa.Next
+			p1 = p1.Next
 		}
-		if pb == nil {
-			pb = headA
+		if p2 == nil {
+			p2 = headA
 		} else {
-			pb = pb.Next
+			p2 = p2.Next
 		}
 	}
-	return pa
+
+	return p1
 }

@@ -42,15 +42,14 @@ func (this *MedianFinder) AddNum(num int) {
 	heap.Push(this.left, num)
 	heap.Push(this.right, heap.Pop(this.left))
 
-	// 保证左右一样多，或者左边比右边多一个。由于每一次添加都遵守这个规则，所以不需要用for
-	if this.left.Len() < this.right.Len() {
+	if this.right.Len() > this.left.Len() {
 		heap.Push(this.left, heap.Pop(this.right))
 	}
 }
 
 func (this *MedianFinder) FindMedian() float64 {
-	if ((*this.left).Len()+(*this.right).Len())%2 == 0 {
-		return (float64((*this.left)[0]) + float64((*this.right)[0])) / 2
+	if this.left.Len() == this.right.Len() {
+		return float64((*this.left)[0]+(*this.right)[0]) / 2
 	} else {
 		return float64((*this.left)[0])
 	}

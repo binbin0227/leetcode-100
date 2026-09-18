@@ -1,5 +1,3 @@
-package main
-
 /**
  * Definition for singly-linked list.
  * type ListNode struct {
@@ -8,15 +6,19 @@ package main
  * }
  */
 func reverseList(head *ListNode) *ListNode {
-	h := &ListNode{}
-
-	p := head
-	for p != nil {
-		pNext := p.Next
-		p.Next = h.Next
-		h.Next = p
-		p = pNext
+	if head == nil {
+		return nil
 	}
 
-	return h.Next
+	dummy := &ListNode{}
+	curr := head
+
+	for curr != nil {
+		n := curr.Next
+		curr.Next = dummy.Next
+		dummy.Next = curr
+		curr = n
+	}
+
+	return dummy.Next
 }
