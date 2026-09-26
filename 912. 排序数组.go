@@ -1,50 +1,44 @@
 package main
 
 func sortArray(nums []int) []int {
-    // 把排序好的两边放到 temp 里面，再复制回原数组
+	sort(nums, 0, len(nums)-1)
+    return nums
+}
 
-	temp := make([]int, len(nums))
-
-	var sort func(left, right int)
-	sort = func(left, right int) {
-		if left >= right {
-			return
-		}
-
-		mid := left + (right-left)/2
-		sort(left, mid)
-		sort(mid+1, right)
-
-		pLeft := left
-		pRight := mid + 1
-		pTemp := left
-
-		for pLeft <= mid && pRight <= right {
-			if nums[pLeft] < nums[pRight] {
-				temp[pTemp] = nums[pLeft]
-				pLeft++
-			} else {
-				temp[pTemp] = nums[pRight]
-				pRight++
-			}
-			pTemp++
-		}
-		for pLeft <= mid {
-			temp[pTemp] = nums[pLeft]
-			pLeft++
-			pTemp++
-		}
-		for pRight <= right {
-			temp[pTemp] = nums[pRight]
-			pRight++
-			pTemp++
-		}
-
-		for p := left; p <= right; p++ {
-			nums[p] = temp[p]
-		}
+func sort(nums []int, l, r int) {
+	if l >= r {
+		return
 	}
 
-	sort(0, len(nums)-1)
-	return nums
+	mid := l + (r-l)/2
+	sort(nums, l, mid)
+	sort(nums, mid+1, r)
+
+	temp := make([]int, r-l+1)
+	curr := 0
+	p1, p2 := l, mid+1
+	for p1 <= mid && p2 <= r {
+		if nums[p1] < nums[p2] {
+			temp[curr] = nums[p1]
+			p1++
+		} else {
+			temp[curr] = nums[p2]
+			p2++
+		}
+		curr++
+	}
+	for p1 <= mid {
+		temp[curr] = nums[p1]
+		p1++
+		curr++
+	}
+	for p2 <= r {
+		temp[curr] = nums[p2]
+		p2++
+		curr++
+	}
+
+	copy(nums[l: r+1], temp) // 左闭右开
+
+    return
 }

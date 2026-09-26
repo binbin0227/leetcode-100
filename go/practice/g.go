@@ -108,3 +108,33 @@ func G3() {
 
 	wg.Wait()
 }
+
+func G4() {
+	// 交替打印奇偶数
+
+	wg := sync.WaitGroup{}
+	wg.Add(1)
+
+	jiCh := make(chan struct{})
+	ouCh := make(chan struct{})
+	go func() {
+		defer wg.Done()
+		for i := 1; i <= 10; i = i + 2 {
+			<-jiCh
+			fmt.Printf("奇协程正在打印：%v\n", i)
+			ouCh <- struct{}{}
+		}
+	}()
+	go func() {
+		defer wg.Done()
+		for i := 2; i <= 10; i = i + 2 {
+			<-ouCh
+			fmt.Printf("偶协程正在打印：%v\n", i)
+			jiCh <- struct{}{}
+		}
+	}()
+
+	jiCh <- struct{}{}
+
+	wg.Wait()
+}
